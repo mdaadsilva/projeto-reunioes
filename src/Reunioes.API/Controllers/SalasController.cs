@@ -58,7 +58,7 @@ namespace Reunioes.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Sala>>> ListarSalas([FromQuery] string? nome, [FromQuery] int pagina = 1, [FromQuery] int tamanhoPagina = 10)
+        public async Task<ActionResult<ResultadoPaginadoDto<Sala>>> ListarSalas([FromQuery] string? nome, [FromQuery] int pagina = 1, [FromQuery] int tamanhoPagina = 10)
         {
             var query = _session.Query<Sala>();
 
@@ -67,12 +67,20 @@ namespace Reunioes.API.Controllers
                 query = query.Where(s => s.Nome != null && s.Nome.Contains(nome));
             }
 
+            var totalItens = await query.CountAsync();
+
             var salasPaginadas = await query.OrderBy(s => s.Andar)
                                             .Skip((pagina - 1) * tamanhoPagina)
                                             .Take(tamanhoPagina)
                                             .ToListAsync();
 
-            return Ok(salasPaginadas);
+            var resultado = new ResultadoPaginadoDto<Sala>
+            {
+                Itens = salasPaginadas,
+                TotalItens = totalItens
+            };
+
+            return Ok(resultado);
         }
 
         [HttpPost]
