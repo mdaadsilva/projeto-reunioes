@@ -1,0 +1,17 @@
+# Arquivos e pastas do .NET
+[Oo]bj/
+[Bb]in/
+*.suo
+*.user
+.vs/
+
+# Arquivos do Rider
+.idea/
+
+# Arquivos do Node.js (para o frontend)
+node_modules/
+dist/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,6 @@
+@Reunioes.API_HostAddress = http://localhost:5251
+
+GET {{Reunioes.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
