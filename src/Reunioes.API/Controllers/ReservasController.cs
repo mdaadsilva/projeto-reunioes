@@ -22,11 +22,18 @@ namespace Reunioes.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Reserva>>> ListarReservas()
+        public async Task<ActionResult<List<Reserva>>> ListarReservas([FromQuery] int? salaId)
         {
-            var reservas = await _session.Query<Reserva>()
-                                         .OrderBy(r => r.Inicio)
-                                         .ToListAsync();
+            var query = _session.Query<Reserva>();
+
+            if (salaId.HasValue)
+            {
+                query = query.Where(r => r.Sala != null && r.Sala.Id == salaId.Value);
+            }
+
+            var reservas = await query.Fetch(r => r.Sala)
+                                      .OrderBy(r => r.Inicio)
+                                      .ToListAsync();
             return Ok(reservas);
         }
 

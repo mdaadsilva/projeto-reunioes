@@ -21,6 +21,17 @@ namespace Reunioes.API.Controllers
             _session = session;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Sala>> BuscarSalaPorId(int id)
+        {
+            var sala = await _session.GetAsync<Sala>(id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+            return Ok(sala);
+        }
+
         [HttpGet("horas-livres")]
         public async Task<ActionResult<List<SalaHorasLivresDto>>> CalcularHorasLivres()
         {
