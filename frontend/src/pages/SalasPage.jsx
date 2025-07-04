@@ -8,6 +8,7 @@ import SalasDataGrid from '../components/SalasDataGrid';
 import StatCards from '../components/StatCards';
 import SalaForm from '../components/SalaForm';
 import SalaEditDialog from '../components/SalaEditDialog';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 function SalasPage() {
     const [salas, setSalas] = useState([]);
@@ -19,6 +20,10 @@ function SalasPage() {
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [salaParaEditar, setSalaParaEditar] = useState(null);
+
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [salaParaDeletar, setSalaParaDeletar] = useState(null);
+    
     const [error, setError] = useState('');
 
     const fetchSalas = () => {
@@ -54,12 +59,26 @@ function SalasPage() {
         fetchSalas();
     };
 
-    const handleDelete = (id) => {
-        axios.delete(`https://localhost:7279/api/salas/${id}`)
-            .then(() => fetchSalas())
+    const handleOpenConfirmDelete = (id) => {
+        setSalaParaDeletar(id);
+        setConfirmDeleteOpen(true);
+    };
+
+    const handleCloseConfirmDelete = () => {
+        setSalaParaDeletar(null);
+        setConfirmDeleteOpen(false);
+    };
+
+    const handleConfirmDelete = () => {
+        axios.delete(`https://localhost:7279/api/salas/${salaParaDeletar}`)
+            .then(() => {
+                handleCloseConfirmDelete();
+                fetchSalas();
+            })
             .catch(err => {
                 console.error("Erro ao excluir sala", err);
                 setError("Não foi possível excluir a sala.");
+                handleCloseConfirmDelete();
             });
     };
 
@@ -124,7 +143,7 @@ function SalasPage() {
                     paginationModel={paginationModel}
                     setPaginationModel={setPaginationModel}
                     onEdit={handleOpenEditDialog}
-                    onSalaExcluida={handleDelete}
+                    onDeleteClick={handleOpenConfirmDelete}
                 />
             </Paper>
 
@@ -140,6 +159,14 @@ function SalasPage() {
                     sala={salaParaEditar} 
                 />
             }
+
+            <ConfirmDialog 
+                open={confirmDeleteOpen}
+                onClose={handleCloseConfirmDelete}
+                onConfirm={handleConfirmDelete}
+                title="Confirmar Exclusão"
+                message="Você tem certeza que deseja excluir esta sala? Esta ação não pode ser desfeita."
+            />
         </Box>
     );
 }

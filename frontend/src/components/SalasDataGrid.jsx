@@ -4,7 +4,7 @@ import { Box, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-function SalasDataGrid({ salas, loading, rowCount, paginationModel, setPaginationModel, onEdit, onSalaExcluida }) {
+function SalasDataGrid({ salas, loading, rowCount, paginationModel, setPaginationModel, onEdit, onDeleteClick }) {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -22,7 +22,7 @@ function SalasDataGrid({ salas, loading, rowCount, paginationModel, setPaginatio
             <IconButton onClick={() => onEdit(params.row)}>
               <EditIcon />
             </IconButton>
-            <IconButton onClick={() => onSalaExcluida(params.row.id)}>
+            <IconButton onClick={() => onDeleteClick(params.row.id)}>
               <DeleteIcon />
             </IconButton>
           </Box>
@@ -32,7 +32,7 @@ function SalasDataGrid({ salas, loading, rowCount, paginationModel, setPaginatio
   ];
 
   return (
-    <Box sx={{ height: '100%', width: '100%' }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <DataGrid
         rows={salas}
         columns={columns}
@@ -44,7 +44,7 @@ function SalasDataGrid({ salas, loading, rowCount, paginationModel, setPaginatio
         pageSizeOptions={[5, 10, 20]}
         disableRowSelectionOnClick
       />
-    </Box>
+    </div>
   );
 }
 

@@ -180,9 +180,11 @@ function ReservarPage() {
                                             secondary={`Até: ${dayjs(reserva.fim).format('DD/MM/YYYY HH:mm')}`}
                                         />
                                         <Box>
-                                            <IconButton aria-label="edit" onClick={() => handleOpenReagendarDialog(reserva)}>
-                                                <EditIcon />
-                                            </IconButton>
+                                            {dayjs(reserva.inicio).isAfter(dayjs()) && (
+                                                <IconButton aria-label="edit" onClick={() => handleOpenReagendarDialog(reserva)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            )}
                                             <IconButton aria-label="delete" onClick={() => handleCancelar(reserva.id)}>
                                                 <DeleteIcon />
                                             </IconButton>
